@@ -112,21 +112,22 @@ namespace resource_allocations
                         if (!empExists) throw new Exception($"Employee with Id {employeeId} does not exist");
 
 
-                        string updateEmpQuery = $@"
+                        string updateEmpQuery = @"
                             UPDATE Employees 
                             SET Status = 'Inactive' 
-                            WHERE EmployeeId = {employeeId}";
+                            WHERE EmployeeId = @EmployeeId";
 
                         using (SqlCommand cmd = new SqlCommand(updateEmpQuery, conn, transaction))
                         {
+                            cmd.Parameters.AddWithValue("@EmployeeId", employeeId);
                             if (cmd.ExecuteNonQuery() == 0) throw new Exception($"Error updating employee ID {employeeId}");
                         }
 
 
-                        string deactivateProjectsQuery = $@"
+                        string deactivateProjectsQuery = @"
                             UPDATE EmployeeProjects
                             SET isActive = 0
-                            WHERE EmployeeId = {employeeId}";
+                            WHERE EmployeeId = @EmployeeId";
 
                         int projectsDeactivated;
                         using (SqlCommand cmd = new SqlCommand(deactivateProjectsQuery, conn, transaction))
@@ -161,9 +162,10 @@ namespace resource_allocations
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = $@"SELECT FullName FROM Employees WHERE EmployeeId = {employeeId}";
+                string query = @"SELECT FullName FROM Employees WHERE EmployeeId = @EmployeeId";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
+                    cmd.Parameters.AddWithValue("@EmployeeId", employeeId);
                     object result = cmd.ExecuteScalar();
                     return (!(string.IsNullOrEmpty(result.ToString())) && !(string.IsNullOrWhiteSpace(result.ToString())));
                 }
@@ -251,16 +253,17 @@ namespace resource_allocations
                     try
                     {
                         // Check if employee exists and is inactive
-                        string checkQuery = $@"
+                        string checkQuery = @"
                             SELECT FullName, Status 
-                            FROM Employees 
-                            WHERE EmployeeId = {employeeId}";
+                            FROM Employees
+                            WHERE employeeId = @EmployeeId";
 
                         string employeeName = "";
                         string status = "";
 
                         using (SqlCommand cmd = new SqlCommand(checkQuery, conn, transaction))
                         {
+                            cmd.Parameters.AddWithValue("@EmployeeId", employeeId);
                             using (SqlDataReader reader = cmd.ExecuteReader())
                             {
                                 if (reader.Read())

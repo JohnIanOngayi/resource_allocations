@@ -10,7 +10,6 @@ namespace resource_allocations
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hallo Welt!!");
         }
     }
 }
