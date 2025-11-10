@@ -171,6 +171,7 @@ namespace resource_allocations
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
+                conn.Open();
                 string query = @"SELECT FullName FROM Employees WHERE EmployeeId = @EmployeeId";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -185,6 +186,7 @@ namespace resource_allocations
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
+                conn.Open();
                 try
                 {
                     string dispQuery = @"
