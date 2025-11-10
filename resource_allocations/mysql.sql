@@ -135,7 +135,7 @@ ORDER BY e.FullName, p.ProjectName;
 -- Drop procedure if it exists
 DROP PROCEDURE IF EXISTS AssignEmployeeToProject;
 
-DELIMITER $$
+DELIMITER //
 
 CREATE PROCEDURE AssignEmployeeToProject(
     IN p_EmployeeId INT,
@@ -255,7 +255,7 @@ BEGIN
         p_ProjectId AS ProjectId,
         NOW() AS AssignedOn;
     
-END$$
+END //
 
 DELIMITER ;
 
@@ -263,48 +263,48 @@ DELIMITER ;
 -- TEST CASES FOR STORED PROCEDURE
 -- ============================================
 
-SELECT '======================================== TEST CASE 1: Valid Assignment' AS TestCase;
-CALL AssignEmployeeToProject(3, 1);
+-- SELECT '======================================== TEST CASE 1: Valid Assignment' AS TestCase;
+-- CALL AssignEmployeeToProject(3, 1);
 
-SELECT '' AS Separator;
-SELECT '======================================== TEST CASE 2: Employee Does Not Exist' AS TestCase;
+-- SELECT '' AS Separator;
+-- SELECT '======================================== TEST CASE 2: Employee Does Not Exist' AS TestCase;
 -- This will throw an error
 -- CALL AssignEmployeeToProject(999, 1);
 
-SELECT '' AS Separator;
-SELECT '======================================== TEST CASE 3: Employee is Inactive' AS TestCase;
+-- SELECT '' AS Separator;
+-- SELECT '======================================== TEST CASE 3: Employee is Inactive' AS TestCase;
 -- CALL AssignEmployeeToProject(3, 2);
 
-SELECT '' AS Separator;
-SELECT '======================================== TEST CASE 4: Project Does Not Exist' AS TestCase;
+-- SELECT '' AS Separator;
+-- SELECT '======================================== TEST CASE 4: Project Does Not Exist' AS TestCase;
 -- CALL AssignEmployeeToProject(1, 999);
 
-SELECT '' AS Separator;
-SELECT '======================================== TEST CASE 5: Employee Already Assigned' AS TestCase;
+-- SELECT '' AS Separator;
+-- SELECT '======================================== TEST CASE 5: Employee Already Assigned' AS TestCase;
 -- CALL AssignEmployeeToProject(1, 1);
 
-SELECT '' AS Separator;
-SELECT '======================================== View Current Assignments' AS TestCase;
-SELECT 
-    e.EmployeeId,
-    e.FullName,
-    e.Status,
-    p.ProjectId,
-    p.ProjectName,
-    ep.AssignedOn,
-    ep.IsActive
-FROM Employees e
-INNER JOIN EmployeeProjects ep ON e.EmployeeId = ep.EmployeeId
-INNER JOIN Projects p ON ep.ProjectId = p.ProjectId
-WHERE ep.IsActive = 1
-ORDER BY e.FullName, p.ProjectName;
+-- SELECT '' AS Separator;
+-- SELECT '======================================== View Current Assignments' AS TestCase;
+-- SELECT 
+--     e.EmployeeId,
+--     e.FullName,
+--     e.Status,
+--     p.ProjectId,
+--     p.ProjectName,
+--     ep.AssignedOn,
+--     ep.IsActive
+-- FROM Employees e
+-- INNER JOIN EmployeeProjects ep ON e.EmployeeId = ep.EmployeeId
+-- INNER JOIN Projects p ON ep.ProjectId = p.ProjectId
+-- WHERE ep.IsActive = 1
+-- ORDER BY e.FullName, p.ProjectName;
 
 -- ============================================
 -- Helper Procedure: View Employee Project Count
 -- ============================================
 DROP PROCEDURE IF EXISTS GetEmployeeProjectCount;
 
-DELIMITER $$
+DELIMITER //
 
 CREATE PROCEDURE GetEmployeeProjectCount(
     IN p_EmployeeId INT
@@ -319,7 +319,7 @@ BEGIN
     LEFT JOIN EmployeeProjects ep ON e.EmployeeId = ep.EmployeeId AND ep.IsActive = 1
     WHERE e.EmployeeId = p_EmployeeId
     GROUP BY e.EmployeeId, e.FullName, e.Status;
-END$$
+END//
 
 DELIMITER ;
 
@@ -328,7 +328,7 @@ DELIMITER ;
 -- ============================================
 DROP PROCEDURE IF EXISTS GetProjectEmployeeCount;
 
-DELIMITER $$
+DELIMITER //
 
 CREATE PROCEDURE GetProjectEmployeeCount(
     IN p_ProjectId INT
@@ -342,6 +342,6 @@ BEGIN
     LEFT JOIN EmployeeProjects ep ON p.ProjectId = ep.ProjectId AND ep.IsActive = 1
     WHERE p.ProjectId = p_ProjectId
     GROUP BY p.ProjectId, p.ProjectName;
-END$$
+END//
 
 DELIMITER ;

@@ -7,7 +7,7 @@ namespace resource_allocations
     public static class MySqlOperations
     {
         private static readonly string connectionString =
-            @"Server=127.0.0.1;Port=3306;Database=csm_10th_november;Uid=root;Pwd=;";
+            @"Server=127.0.0.1;Port=3306;Database=Resource_Allocations;Uid=root;Pwd=;";
         private static readonly string storedProcedure = "AssignEmployeeToProject";
         public static void InsertSampleData()
         {
