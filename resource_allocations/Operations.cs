@@ -1,18 +1,13 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace resource_allocations
 {
     public static class Operations
     {
         private static readonly string connectionString =
-            "Server=localhost;Database=Resource_Allocations;Integrated Security=true;TrustServerCertificate=true;";
+            "Server=;Database=Resource_Allocations;Integrated Security=true;TrustServerCertificate=true;";
         private static readonly string storedProcedure = "AssignEmployeeToProject";
         public static void InsertSampleData()
         {
@@ -166,12 +161,149 @@ namespace resource_allocations
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "SELECT FullName FROM Employees WHERE EmployeeId = @EmployeeId";
+                string query = $@"SELECT FullName FROM Employees WHERE EmployeeId = {employeeId}";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@EmployeeId", employeeId);
                     object result = cmd.ExecuteScalar();
                     return (!(string.IsNullOrEmpty(result.ToString())) && !(string.IsNullOrWhiteSpace(result.ToString())));
+                }
+            }
+        }
+
+        public static void DisplayActiveEmployeeProjectsAssignments()
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    string dispQuery = @"
+                        SELECT 
+                            e.EmployeeId,
+                            e.FullName,
+                            e.Status,
+                            p.ProjectId,
+                            p.ProjectName,
+                            ep.AssignedOn,
+                            ep.IsActive
+                        FROM Employees e
+                        INNER JOIN EmployeeProjects ep ON e.EmployeeId = ep.EmployeeId
+                        INNER JOIN Projects p ON ep.ProjectId = p.ProjectId
+                        WHERE ep.IsActive = 1
+                        ORDER BY e.FullName, p.ProjectName";
+
+                    using (SqlCommand cmd = new SqlCommand(dispQuery, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            Console.WriteLine("{0,-5} {1,-20} {2,-10} {3,-5} {4,-25} {5,-20}",
+                                "EmpID", "Employee Name", "Status", "PrjID", "Project Name", "Assigned On");
+                            Console.WriteLine(new string('-', 95));
+
+                            int count = 0;
+                            while (reader.Read())
+                            {
+                                Console.WriteLine("{0,-5} {1,-20} {2,-10} {3,-5} {4,-25} {5,-20}",
+                                    reader["EmployeeId"],
+                                    reader["FullName"],
+                                    reader["Status"],
+                                    reader["ProjectId"],
+                                    reader["ProjectName"],
+                                    ((DateTime)reader["AssignedOn"]).ToString("yyyy-MM-dd HH:mm"));
+                                count++;
+                            }
+
+                            if (count == 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.WriteLine("No active assignments found.");
+                                Console.ResetColor();
+                            }
+                            else
+                            {
+                                Console.WriteLine(new string('-', 95));
+                                Console.WriteLine($"Total Active Assignments: {count}");
+                            }
+                        }
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"✗ SQL ERROR: {sqlEx.Message}");
+                    Console.ResetColor();
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"✗ ERROR: {ex.Message}");
+                    Console.ResetColor();
+                }
+            }
+        }
+
+        public static void DeleteInactiveEmployee(int employeeId)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // Check if employee exists and is inactive
+                        string checkQuery = $@"
+                            SELECT FullName, Status 
+                            FROM Employees 
+                            WHERE EmployeeId = {employeeId}";
+
+                        string employeeName = "";
+                        string status = "";
+
+                        using (SqlCommand cmd = new SqlCommand(checkQuery, conn, transaction))
+                        {
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    employeeName = reader["FullName"].ToString();
+                                    status = reader["Status"].ToString();
+                                }
+                                else
+                                {
+                                    throw new Exception($"Employee with ID {employeeId} does not exist.");
+                                }
+                            }
+                        }
+
+                        if (status == "Active")
+                        {
+                            throw new Exception($"Cannot delete active employee '{employeeName}'. Deactivate first.");
+                        }
+
+                        // Delete employee (CASCADE will delete EmployeeProjects)
+                        string deleteQuery = "DELETE FROM Employees WHERE EmployeeId = @EmployeeId";
+
+                        using (SqlCommand cmd = new SqlCommand(deleteQuery, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@EmployeeId", employeeId);
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                transaction.Commit();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine($"✓ SUCCESS: Inactive employee '{employeeName}' (ID:{employeeId}) deleted");
+                                Console.ResetColor();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"✗ ERROR: {ex.Message}");
+                        Console.ResetColor();
+                    }
                 }
             }
         }
