@@ -171,21 +171,13 @@ namespace resource_allocations
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
+                conn.Open();
                 string query = @"SELECT FullName FROM Employees WHERE EmployeeId = @EmployeeId";
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("EmployeeId", employeeId);
-                    string result;
-                    try
-                    {
-                       result = cmd.ExecuteScalar().ToString() ?? null;
-
-                    }
-                    catch (Exception)
-                    {
-                        result = null;
-                    }
-                    return  result != null;
+                    object result = cmd.ExecuteScalar();
+                    return result != null && result != DBNull.Value;
                 }
             }
         }
@@ -194,6 +186,7 @@ namespace resource_allocations
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
+                conn.Open();
                 try
                 {
                     string dispQuery = @"
