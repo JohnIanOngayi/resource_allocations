@@ -76,27 +76,27 @@ CREATE TABLE EmployeeProjects (
 -- ============================================
 
 -- Insert sample employees
-INSERT INTO Employees (FullName, Email, Status) VALUES
-('John Doe', 'john.doe@company.com', 'Active'),
-('Jane Smith', 'jane.smith@company.com', 'Active'),
-('Bob Johnson', 'bob.johnson@company.com', 'Inactive'),
-('Alice Williams', 'alice.williams@company.com', 'Active');
+-- INSERT INTO Employees (FullName, Email, Status) VALUES
+-- ('John Doe', 'john.doe@company.com', 'Active'),
+-- ('Jane Smith', 'jane.smith@company.com', 'Active'),
+-- ('Bob Johnson', 'bob.johnson@company.com', 'Inactive'),
+-- ('Alice Williams', 'alice.williams@company.com', 'Active');
 
 -- Insert sample projects
-INSERT INTO Projects (ProjectName, StartDate, EndDate) VALUES
-('Website Redesign', '2024-01-01', '2024-06-30'),
-('Mobile App Development', '2024-03-15', '2024-12-31'),
-('Database Migration', '2024-02-01', '2024-04-30'),
-('AI Integration', '2024-05-01', '2025-03-31');
+-- INSERT INTO Projects (ProjectName, StartDate, EndDate) VALUES
+-- ('Website Redesign', '2024-01-01', '2024-06-30'),
+-- ('Mobile App Development', '2024-03-15', '2024-12-31'),
+-- ('Database Migration', '2024-02-01', '2024-04-30'),
+-- ('AI Integration', '2024-05-01', '2025-03-31');
 
 -- Insert sample employee-project assignments
-INSERT INTO EmployeeProjects (EmployeeId, ProjectId) VALUES
-(1, 1),  -- John Doe on Website Redesign
-(1, 2),  -- John Doe on Mobile App
-(2, 1),  -- Jane Smith on Website Redesign
-(2, 3),  -- Jane Smith on Database Migration
-(4, 2),  -- Alice Williams on Mobile App
-(4, 4);  -- Alice Williams on AI Integration
+-- INSERT INTO EmployeeProjects (EmployeeId, ProjectId) VALUES
+-- (1, 1),  -- John Doe on Website Redesign
+-- (1, 2),  -- John Doe on Mobile App
+-- (2, 1),  -- Jane Smith on Website Redesign
+-- (2, 3),  -- Jane Smith on Database Migration
+-- (4, 2),  -- Alice Williams on Mobile App
+-- (4, 4);  -- Alice Williams on AI Integration
 
 -- ============================================
 -- Verification Queries

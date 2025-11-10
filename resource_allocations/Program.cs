@@ -21,13 +21,13 @@ namespace resource_allocations
                 Console.WriteLine("=== PART 4: INSERTING SAMPLE DATA ===\n");
                 MySqlOperations.InsertSampleData();
 
-                // Demonstrate READ operation
-                Console.WriteLine("\n=== READ: Display All Active Assignments ===\n");
-                MySqlOperations.DisplayActiveEmployeeProjectsAssignments();
-
                 // Demonstrate CREATE operation - Successful scenarios
                 Console.WriteLine("\n=== CREATE: Testing Successful Assignments ===\n");
                 MySqlOperations.TestSuccessfulAssignment();
+
+                // Demonstrate READ operation
+                Console.WriteLine("\n=== READ: Display All Active Assignments ===\n");
+                MySqlOperations.DisplayActiveEmployeeProjectsAssignments();
 
                 // Demonstrate CREATE operation - Failed scenarios
                 Console.WriteLine("\n=== CREATE: Testing Failed Assignments (Validations) ===\n");

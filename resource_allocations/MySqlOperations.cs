@@ -53,6 +53,7 @@ namespace resource_allocations
                         string insertProjects = "INSERT INTO Projects (ProjectName, StartDate, EndDate) VALUES " +
                             string.Join(", ", projects);
                         cmd = new MySqlCommand(insertProjects, conn, transaction);
+                        cmd.ExecuteNonQuery();
 
                         transaction.Commit();
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -174,8 +175,17 @@ namespace resource_allocations
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("EmployeeId", employeeId);
-                    object result = cmd.ExecuteScalar();
-                    return (!(string.IsNullOrEmpty(result.ToString())) && !(string.IsNullOrWhiteSpace(result.ToString())));
+                    string result;
+                    try
+                    {
+                       result = cmd.ExecuteScalar().ToString() ?? null;
+
+                    }
+                    catch (Exception)
+                    {
+                        result = null;
+                    }
+                    return  result != null;
                 }
             }
         }

@@ -53,6 +53,7 @@ namespace resource_allocations
                         string insertProjects = "INSERT INTO Projects (ProjectName, StartDate, EndDate) VALUES " +
                             string.Join(", ", projects);
                         cmd = new SqlCommand(insertProjects, conn, transaction);
+                        cmd.ExecuteNonQuery();
 
                         transaction.Commit();
                         Console.ForegroundColor = ConsoleColor.Green;
