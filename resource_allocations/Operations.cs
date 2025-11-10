@@ -18,6 +18,14 @@ namespace resource_allocations
                 {
                     try
                     {
+                        SqlCommand cmd = new SqlCommand("TRUNCATE TABLE EmployeeProjects", conn, transaction);
+                        cmd.ExecuteNonQuery();
+
+                        cmd = new SqlCommand("TRUNCATE TABLE Projects", conn, transaction);
+                        cmd.ExecuteNonQuery();
+
+                        cmd = new SqlCommand("TRUNCATE TABLE Employees", conn, transaction);
+                        cmd.ExecuteNonQuery();
 
                         // Insert 5 employees
                         string[] employees = new string[]
@@ -32,7 +40,7 @@ namespace resource_allocations
                         string insertEmployees = "INSERT INTO Employees (FullName, Email, Status) VALUES " +
                             string.Join(", ", employees);
 
-                        SqlCommand cmd = new SqlCommand(insertEmployees, conn, transaction);
+                        cmd = new SqlCommand(insertEmployees, conn, transaction);
                         cmd.ExecuteNonQuery();
 
                         string[] projects = new string[]
