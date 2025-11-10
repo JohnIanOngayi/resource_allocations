@@ -19,31 +19,31 @@ namespace resource_allocations
             {
                 // Part 4: Insert sample data
                 Console.WriteLine("=== PART 4: INSERTING SAMPLE DATA ===\n");
-                Operations.InsertSampleData();
+                MySqlOperations.InsertSampleData();
 
                 // Demonstrate READ operation
                 Console.WriteLine("\n=== READ: Display All Active Assignments ===\n");
-                Operations.DisplayActiveEmployeeProjectsAssignments();
+                MySqlOperations.DisplayActiveEmployeeProjectsAssignments();
 
                 // Demonstrate CREATE operation - Successful scenarios
                 Console.WriteLine("\n=== CREATE: Testing Successful Assignments ===\n");
-                Operations.TestSuccessfulAssignment();
+                MySqlOperations.TestSuccessfulAssignment();
 
                 // Demonstrate CREATE operation - Failed scenarios
                 Console.WriteLine("\n=== CREATE: Testing Failed Assignments (Validations) ===\n");
-                Operations.TestFailedAssignments();
+                MySqlOperations.TestFailedAssignments();
 
                 // Demonstrate UPDATE operation
                 Console.WriteLine("\n=== UPDATE: Deactivate Employee and Their Projects ===\n");
-                Operations.TestDeactivateEmployee();
+                MySqlOperations.TestDeactivateEmployee();
 
                 // Demonstrate DELETE operation (Optional)
                 Console.WriteLine("\n=== DELETE: Remove Inactive Employee ===\n");
-                Operations.TestDeleteInactiveEmployee();
+                MySqlOperations.TestDeleteInactiveEmployee();
 
                 // Final state
                 Console.WriteLine("\n=== FINAL STATE: All Active Assignments ===\n");
-                Operations.DisplayActiveEmployeeProjectsAssignments();
+                MySqlOperations.DisplayActiveEmployeeProjectsAssignments();
 
             }
             catch (Exception ex)

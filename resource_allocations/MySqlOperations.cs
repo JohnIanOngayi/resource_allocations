@@ -18,13 +18,13 @@ namespace resource_allocations
                 {
                     try
                     {
-                        MySqlCommand cmd = new MySqlCommand("TRUNCATE TABLE EmployeeProjects", conn, transaction);
+                        MySqlCommand cmd = new MySqlCommand("DELETE FROM EmployeeProjects", conn, transaction);
                         cmd.ExecuteNonQuery();
 
-                        cmd = new MySqlCommand("TRUNCATE TABLE Projects", conn, transaction);
+                        cmd = new MySqlCommand("DELETE FROM Projects", conn, transaction);
                         cmd.ExecuteNonQuery();
 
-                        cmd = new MySqlCommand("TRUNCATE TABLE Employees", conn, transaction);
+                        cmd = new MySqlCommand("DELETE FROM Employees", conn, transaction);
                         cmd.ExecuteNonQuery();
 
                         // Insert 5 employees

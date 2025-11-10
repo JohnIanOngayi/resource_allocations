@@ -18,13 +18,13 @@ namespace resource_allocations
                 {
                     try
                     {
-                        SqlCommand cmd = new SqlCommand("TRUNCATE TABLE EmployeeProjects", conn, transaction);
+                        SqlCommand cmd = new SqlCommand("DELETE FROM EmployeeProjects", conn, transaction);
                         cmd.ExecuteNonQuery();
 
-                        cmd = new SqlCommand("TRUNCATE TABLE Projects", conn, transaction);
+                        cmd = new SqlCommand("DELETE FROM Projects", conn, transaction);
                         cmd.ExecuteNonQuery();
 
-                        cmd = new SqlCommand("TRUNCATE TABLE Employees", conn, transaction);
+                        cmd = new SqlCommand("DELETE FROM Employees", conn, transaction);
                         cmd.ExecuteNonQuery();
 
                         // Insert 5 employees
