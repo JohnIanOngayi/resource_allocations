@@ -318,5 +318,63 @@ namespace resource_allocations
                 }
             }
         }
+
+        public static void TestSuccessfulAssignment()
+        {
+            Console.WriteLine("Test 1: Assign Alice (ID:1) to E-Commerce Platform (ID:1)");
+            AssignEmployeeToProject(1, 1);
+
+            Console.WriteLine("\nTest 2: Assign Bob (ID:2) to E-Commerce Platform (ID:1)");
+            AssignEmployeeToProject(2, 1);
+
+            Console.WriteLine("\nTest 3: Assign Alice (ID:1) to Mobile Banking App (ID:2)");
+            AssignEmployeeToProject(1, 2);
+        }
+
+        public static void TestFailedAssignments()
+        {
+            Console.WriteLine("Test 1: Non-existent Employee (ID:999)");
+            AssignEmployeeToProject(999, 1);
+
+            Console.WriteLine("\nTest 2: Inactive Employee (Eve - ID:5)");
+            AssignEmployeeToProject(5, 1);
+
+            Console.WriteLine("\nTest 3: Non-existent Project (ID:999)");
+            AssignEmployeeToProject(1, 999);
+
+            Console.WriteLine("\nTest 4: Duplicate Assignment (Alice already on Project 1)");
+            AssignEmployeeToProject(1, 1);
+
+            Console.WriteLine("\nTest 5: Employee with 3+ Active Projects");
+            // First assign Alice to project 3 (she already has 2)
+            AssignEmployeeToProject(1, 3);
+            // Try to assign to a 4th project - should fail
+            Console.WriteLine("Attempting to assign Alice to a 4th project (should fail):");
+            AssignEmployeeToProject(1, 4); // This will fail - no project 4 exists anyway
+
+            Console.WriteLine("\nTest 6: Project with 10+ Active Employees");
+            Console.WriteLine("Assigning multiple employees to Project 2...");
+            for (int i = 2; i <= 4; i++)
+            {
+                AssignEmployeeToProject(i, 2);
+            }
+        }
+        public static void TestDeactivateEmployee()
+        {
+            Console.WriteLine("Deactivating Bob Smith (ID:2) and all his active projects...\n");
+            DeactivateEmployee(2);
+
+            Console.WriteLine("\nAttempting to deactivate non-existent employee (ID:999)...\n");
+            DeactivateEmployee(999);
+        }
+
+        public static void TestDeleteInactiveEmployee()
+        {
+            Console.WriteLine("Attempting to delete inactive employee Eve Davis (ID:5)...\n");
+            DeleteInactiveEmployee(5);
+
+            Console.WriteLine("\nAttempting to delete active employee Alice (ID:1) - should fail...\n");
+            DeleteInactiveEmployee(1);
+        }
     }
 }
